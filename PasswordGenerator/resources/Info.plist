@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>bip</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+                        <string>pg.icns</string>
+			<key>CFBundleTypeName</key>
+                        <string>Password Generator(.pg)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+		</dict>
+	</array>
+
+	<key>CFBundleIconFile</key>
+        <string>pg.icns</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleExecutable</key>
+        <string>BipPacker</string>
+	<key>CFBundleIdentifier</key>
+        <string>com.zhuyanbiin.passwordgenerator</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>NSHumanReadableCopyright</key>
+        <string></string>
+        <key>CFBundleName</key>
+        <string>PasswordGenerator</string>
+        <key>NSHighResolutionCapable</key>
+        <true/>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+        <key>NSContactsUsageDescription</key>
+        <string>Your mail address will be used to populate the email field in the crash / feedback reporter.</string>
+</dict>
+</plist>
