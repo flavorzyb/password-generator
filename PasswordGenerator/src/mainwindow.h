@@ -29,7 +29,10 @@ private:
     void addEvent();
     void removeEvent();
     QVector<char> createPasswordSlat();
-    bool checkSettings();
+    QVector<char> createPasswordPrefix();
+    const QString createPassword();
+    bool checkSettings() const;
+    int getLetterNumber() const;
 private slots:
     void updatePasswordLength();
     void copyPasswordToClipboard();

@@ -12,6 +12,16 @@
 static const char * const SPECIAL_LETTER = "!@#$%^&*";
 static const size_t SPECIAL_LETTER_LEN = strlen(SPECIAL_LETTER);
 
+bool isSpecialLetter(char s) {
+    for (int i = 0; i < SPECIAL_LETTER_LEN; i++) {
+        if (s == *(SPECIAL_LETTER + i)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       applicaton(NULL)
@@ -210,17 +220,53 @@ void MainWindow::generaterPassword()
     }
     pbCopyPassword->setEnabled(true);
     lePassword->setEnabled(true);
+
+    lePassword->setText(createPassword());
+}
+
+const QString MainWindow::createPassword()
+{
     int length = passLength->value();
+    QVector<char> passVector = createPasswordPrefix();
     QVector<char> slat = createPasswordSlat();
-    QString result;
     int index;
     int slatSize = slat.size();
+    length -= getLetterNumber() * 2;
     for (int i = 0; i < length; i++) {
         index = qrand() % slatSize;
-        result.append(slat.at(index));
+        passVector.append(slat.at(index));
     }
 
-    lePassword->setText(result);
+    QString result;
+    length = passLength->value();
+    char s;
+    do {
+        index = qrand() % passVector.size();
+        s = passVector.at(index);
+        if (!isSpecialLetter(s)) {
+            result.append(s);
+            passVector.removeAt(index);
+            break;
+        }
+    }while(true);
+
+    do {
+        index = qrand() % passVector.size();
+        s = passVector.at(index);
+        if (!isSpecialLetter(s)) {
+            passVector.removeAt(index);
+            break;
+        }
+    }while(true);
+
+    length = passVector.size();
+    for (int i = 0; i < length; i++) {
+        index = qrand() % passVector.size();
+        result.append(passVector.at(index));
+    }
+
+    result.append(s);
+    return result;
 }
 
 void MainWindow::setApplication(const QApplication *app)
@@ -233,6 +279,66 @@ void MainWindow::exit()
     if (applicaton) {
         applicaton->quit();
     }
+}
+
+QVector<char> MainWindow::createPasswordPrefix()
+{
+    QVector<char> result;
+    QVector<char> slat;
+    int index;
+    int slatSize;
+    if (upperLetter->isChecked()) {
+        for (char i = 'A'; i <= 'Z'; i++) {
+            slat.append(i);
+        }
+
+        slatSize = slat.size();
+        for (int i = 0; i < 2; i++) {
+            index = qrand() % slatSize;
+            result.append(slat.at(index));
+        }
+    }
+
+    slat.clear();
+    if (lowerLetter->isChecked()) {
+        for (char i = 'a'; i <= 'z'; i++) {
+            slat.append(i);
+        }
+
+        slatSize = slat.size();
+        for (int i = 0; i < 2; i++) {
+            index = qrand() % slatSize;
+            result.append(slat.at(index));
+        }
+    }
+
+    slat.clear();
+    if (numberLetter->isChecked()) {
+        for (char i = '0'; i <= '9'; i++) {
+            slat.append(i);
+        }
+
+        slatSize = slat.size();
+        for (int i = 0; i < 2; i++) {
+            index = qrand() % slatSize;
+            result.append(slat.at(index));
+        }
+    }
+
+    slat.clear();
+    if (specialLetter->isChecked()) {
+        for (size_t i = 0; i < SPECIAL_LETTER_LEN; i++) {
+            slat.append(*(SPECIAL_LETTER + i));
+        }
+
+        slatSize = slat.size();
+        for (int i = 0; i < 2; i++) {
+            index = qrand() % slatSize;
+            result.append(slat.at(index));
+        }
+    }
+
+    return result;
 }
 
 QVector<char> MainWindow::createPasswordSlat()
@@ -265,7 +371,7 @@ QVector<char> MainWindow::createPasswordSlat()
     return result;
 }
 
-bool MainWindow::checkSettings()
+int MainWindow::getLetterNumber() const
 {
     int result = 0;
     if (upperLetter->isChecked()) {
@@ -284,5 +390,10 @@ bool MainWindow::checkSettings()
         result++;
     }
 
-    return result > 1;
+    return result;
+}
+
+bool MainWindow::checkSettings() const
+{
+    return getLetterNumber() > 1;
 }
