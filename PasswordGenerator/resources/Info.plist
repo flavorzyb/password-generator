@@ -29,7 +29,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-        <string>BipPacker</string>
+        <string>PasswordGenerator</string>
 	<key>CFBundleIdentifier</key>
         <string>com.zhuyanbiin.passwordgenerator</string>
 	<key>CFBundleVersion</key>
