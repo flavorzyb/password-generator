@@ -13,8 +13,44 @@ static const char * const SPECIAL_LETTER = "!@#$%^&*";
 static const size_t SPECIAL_LETTER_LEN = strlen(SPECIAL_LETTER);
 
 bool isSpecialLetter(char s) {
-    for (int i = 0; i < SPECIAL_LETTER_LEN; i++) {
+    for (size_t i = 0; i < SPECIAL_LETTER_LEN; i++) {
         if (s == *(SPECIAL_LETTER + i)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QVector<char> randLetter(const QVector<char> &slat)
+{
+    QVector<char> result;
+    int len = 0;
+    int slatSize = slat.size();
+    char * s = NULL;
+    int index;
+    do {
+        index = qrand() % slatSize;
+
+        if ((NULL == s) || (*s != slat.at(index))) {
+            len++;
+            result.append(slat.at(index));
+        }
+    }while(len < 2);
+
+    return result;
+}
+
+bool isMoreThanLetter(const QVector<char> & data, char s)
+{
+    int times = 0;
+    int size = data.size();
+    for (int i = 0; i < size; i++) {
+        if (s == data.at(i)) {
+            times ++;
+        }
+
+        if (times >= 2) {
             return true;
         }
     }
@@ -231,15 +267,22 @@ const QString MainWindow::createPassword()
     QVector<char> slat = createPasswordSlat();
     int index;
     int slatSize = slat.size();
+    char s;
     length -= getLetterNumber() * 2;
     for (int i = 0; i < length; i++) {
-        index = qrand() % slatSize;
-        passVector.append(slat.at(index));
+        for (int j = 0; j< 20; j++) {
+            index = qrand() % slatSize;
+            s = slat.at(index);
+            if (!isMoreThanLetter(passVector, s)) {
+                passVector.append(s);
+                break;
+            }
+        }
     }
 
     QString result;
     length = passLength->value();
-    char s;
+    // first letter
     do {
         index = qrand() % passVector.size();
         s = passVector.at(index);
@@ -250,10 +293,12 @@ const QString MainWindow::createPassword()
         }
     }while(true);
 
+    // last letter
+    char last;
     do {
         index = qrand() % passVector.size();
-        s = passVector.at(index);
-        if (!isSpecialLetter(s)) {
+        last = passVector.at(index);
+        if (!isSpecialLetter(last)) {
             passVector.removeAt(index);
             break;
         }
@@ -262,10 +307,12 @@ const QString MainWindow::createPassword()
     length = passVector.size();
     for (int i = 0; i < length; i++) {
         index = qrand() % passVector.size();
-        result.append(passVector.at(index));
+        s = passVector.at(index);
+        passVector.removeAt(index);
+        result.append(s);
     }
 
-    result.append(s);
+    result.append(last);
     return result;
 }
 
@@ -285,18 +332,13 @@ QVector<char> MainWindow::createPasswordPrefix()
 {
     QVector<char> result;
     QVector<char> slat;
-    int index;
-    int slatSize;
+
     if (upperLetter->isChecked()) {
         for (char i = 'A'; i <= 'Z'; i++) {
             slat.append(i);
         }
 
-        slatSize = slat.size();
-        for (int i = 0; i < 2; i++) {
-            index = qrand() % slatSize;
-            result.append(slat.at(index));
-        }
+        result += randLetter(slat);
     }
 
     slat.clear();
@@ -305,11 +347,7 @@ QVector<char> MainWindow::createPasswordPrefix()
             slat.append(i);
         }
 
-        slatSize = slat.size();
-        for (int i = 0; i < 2; i++) {
-            index = qrand() % slatSize;
-            result.append(slat.at(index));
-        }
+        result += randLetter(slat);
     }
 
     slat.clear();
@@ -318,11 +356,7 @@ QVector<char> MainWindow::createPasswordPrefix()
             slat.append(i);
         }
 
-        slatSize = slat.size();
-        for (int i = 0; i < 2; i++) {
-            index = qrand() % slatSize;
-            result.append(slat.at(index));
-        }
+        result += randLetter(slat);
     }
 
     slat.clear();
@@ -331,11 +365,7 @@ QVector<char> MainWindow::createPasswordPrefix()
             slat.append(*(SPECIAL_LETTER + i));
         }
 
-        slatSize = slat.size();
-        for (int i = 0; i < 2; i++) {
-            index = qrand() % slatSize;
-            result.append(slat.at(index));
-        }
+        result += randLetter(slat);
     }
 
     return result;
