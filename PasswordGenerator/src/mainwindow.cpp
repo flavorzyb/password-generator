@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QBoxLayout>
 #include <QString>
+#include <QTime>
 #include <QClipboard>
 #include <QMessageBox>
 
@@ -269,6 +270,7 @@ const QString MainWindow::createPassword()
     int slatSize = slat.size();
     char s;
     length -= getLetterNumber() * 2;
+    qsrand(QTime::currentTime().msec());
     for (int i = 0; i < length; i++) {
         for (int j = 0; j< 20; j++) {
             index = qrand() % slatSize;
@@ -283,6 +285,7 @@ const QString MainWindow::createPassword()
     QString result;
     length = passLength->value();
     // first letter
+    qsrand(QTime::currentTime().msec());
     do {
         index = qrand() % passVector.size();
         s = passVector.at(index);
@@ -294,6 +297,7 @@ const QString MainWindow::createPassword()
     }while(true);
 
     // last letter
+    qsrand(QTime::currentTime().msec());
     char last;
     do {
         index = qrand() % passVector.size();
@@ -305,6 +309,7 @@ const QString MainWindow::createPassword()
     }while(true);
 
     length = passVector.size();
+    qsrand(QTime::currentTime().msec());
     for (int i = 0; i < length; i++) {
         index = qrand() % passVector.size();
         s = passVector.at(index);
